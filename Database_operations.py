@@ -168,16 +168,16 @@ class db_operations:
 
             
 
-if __name__ == "__main__":
-#     # create = db_creation()
-#     # create.ParkingSpot_details()
-#     # create.vehical_details()
+# if __name__ == "__main__":
+    # create = db_creation()
+    # create.ParkingSpot_details()
+    # create.vehical_details()
 
-    data =  db_operations()
+    # data =  db_operations()
     # print(data.get_empty_parking_spot())
-#     print(data.get_Occupied_parking_spot())
-#     print(data.park_vehical("MH23645"))
-    print(data.search_vehical("MH652365126"))
-#     print(data.fare_calculator("MH23645"))
+    # print(data.get_Occupied_parking_spot())
+    # print(data.park_vehical("MH23645"))
+    # print(data.search_vehical("MH652365126"))
+    # print(data.fare_calculator("MH23645"))
 
 

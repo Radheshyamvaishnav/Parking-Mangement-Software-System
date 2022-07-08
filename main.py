@@ -72,9 +72,14 @@ def my_form():
 
 
 
-    result = ""
+    result = "Run Query & View Your Results Here"
 
     return render_template('index.html', data = result)
+
+
+
+
+
 
 
 
