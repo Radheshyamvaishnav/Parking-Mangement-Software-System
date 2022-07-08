@@ -8,33 +8,33 @@
 </head>
 <body>
     <h2>Parking Management Software System</h2>
-<div class="container" id="container">
-	<div class="form-container sign-in-container">
-		<form method="post">
-			
-			<input type="text" placeholder="VehicalName" name = "VehicalName" /><br><br>
-			<button type="submit" name="button" value="Park"> &nbsp;&nbsp;Park Vehical&nbsp;&nbsp;</button><br>
-            <button type="submit" name="button" value="Depart"> &nbsp;Calculate Fare & Depart</button><br>
-            <button type="submit" name="button" value="Search"> Search Vehical</button><br>
-            <button type="submit" name="button" value="Empty"> &nbsp;&nbsp;Empty Spots&nbsp;&nbsp;</button><br>
-            <button type="submit" name="button" value="Occupied"> Occupied Sopts</button><br>
-		</form>
-	</div>
-	<div class="overlay-container">
-		<div class="overlay">
-			<div class="overlay-panel overlay-right">
-				<p>{{ data }}</p>
+	<div class="container" id="container">
+		<div class="form-container sign-in-container">
+			<form method="post">
+				
+				<input type="text" placeholder="VehicalName" name = "VehicalName" /><br><br>
+				<button type="submit" name="button" value="Park"> &nbsp;&nbsp;Park Vehical&nbsp;&nbsp;</button><br>
+				<button type="submit" name="button" value="Depart"> &nbsp;Calculate Fare & Depart</button><br>
+				<button type="submit" name="button" value="Search"> Search Vehical</button><br>
+				<button type="submit" name="button" value="Empty"> &nbsp;&nbsp;Empty Spots&nbsp;&nbsp;</button><br>
+				<button type="submit" name="button" value="Occupied"> Occupied Sopts</button><br>
+			</form>
+		</div>
+		<div class="overlay-container">
+			<div class="overlay">
+				<div class="overlay-panel overlay-right">
+					<p>{{ data }}</p>
+				</div>
 			</div>
 		</div>
 	</div>
-</div>
 
 
 </body>
 
 <style>
     
-* {
+*{
 	box-sizing: border-box;
 }
 
