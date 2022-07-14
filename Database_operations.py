@@ -33,13 +33,11 @@ class db_creation:
                  );
                 ''')
 
-
         for i in range(1,51):
             conn.execute(''' INSERT INTO ParkingSpot_details (Spot, VehicalNumber) \
                     VALUES ( "Empty" , Null )''');
 
             conn.commit()
-
         
         conn.close()
 
@@ -48,40 +46,30 @@ class db_creation:
 class db_operations:
 
     def get_empty_parking_spot(self):
-            conn = sqlite3.connect('Parking_Management_System.db')
-            cursor = conn.cursor()
+                conn = sqlite3.connect('Parking_Management_System.db')
+                cursor = conn.cursor()
 
-            try:
                 empty_spot = cursor.execute(''' Select *  
                                             FROM ParkingSpot_details 
                                             Where Spot = "Empty" ;  
                                             ''')
-                
                 conn.commit()
                 return empty_spot
-            except:
-                empty_spot = "None"
-                return empty_spot
-
 
             
 
     def get_Occupied_parking_spot(self):
-            conn = sqlite3.connect('Parking_Management_System.db')
-            cursor = conn.cursor()
-            try:
+                conn = sqlite3.connect('Parking_Management_System.db')
+                cursor = conn.cursor()
+            
                 Occupied_spot = cursor.execute(''' Select *  
                                             FROM ParkingSpot_details 
                                             Where Spot = "Occupied" ;  
                                             ''')
-
                 conn.commit()
+
+                return Occupied_spot
             
-                
-                return Occupied_spot
-            except:
-                Occupied_spot = "None"
-                return Occupied_spot
 
 
     def park_vehical(self,VehicalNumber):
@@ -91,23 +79,26 @@ class db_operations:
         empty_spot = self.get_empty_parking_spot()
         empty_spot = empty_spot.fetchone()
 
-        cursor.execute('''
-        Update ParkingSpot_details  Set VehicalNumber = ?,
-        Spot = "Occupied"   
-        Where  ParkingSpotNumber = ? ;
-        ''', (VehicalNumber, str(empty_spot[0])))   
+        if empty_spot is None:
+            
+            return "No Parking Spots available"
+        
+        else:
+            cursor.execute('''
+                Update ParkingSpot_details  Set VehicalNumber = ?,
+                Spot = "Occupied"   
+                Where  ParkingSpotNumber = ? ;
+                ''', (VehicalNumber, str(empty_spot[0])))   
 
-        cursor.execute( " INSERT INTO Vehical_details (VehicalNumber, ParkingSpaceNumber, ParkingStarttime) \
-                    VALUES ( ? , ?, ? )", (VehicalNumber, str(empty_spot[0]), datetime.datetime.now() ))
+            cursor.execute( " INSERT INTO Vehical_details (VehicalNumber, ParkingSpaceNumber, ParkingStarttime) \
+                            VALUES ( ? , ?, ? )", (VehicalNumber, str(empty_spot[0]), datetime.datetime.now() ))
 
 
+            conn.commit()
 
-        conn.commit()
-       
+            parking_details = " Please Park Your Vehical " + VehicalNumber + " at Spot Number " + str(empty_spot[0])
 
-        parking_details = " Please Park Your Vehical " + VehicalNumber + " at Spot Number " + str(empty_spot[0])
-
-        return parking_details
+            return parking_details
 
 
 
@@ -119,22 +110,28 @@ class db_operations:
             departing_VehicalNumber = cursor.execute("Select * FROM ParkingSpot_details Where VehicalNumber == ? ;", (VehicalNumber,) )
             departing_Vehical_Number = departing_VehicalNumber.fetchone()
 
-            cursor.execute('''
-                            Update ParkingSpot_details  Set VehicalNumber = NULL,
-                            Spot = "Empty"   
-                            Where  VehicalNumber == ? ;
-                            ''', (str(departing_Vehical_Number[2]),))  
-            
-            cursor.execute('''
-                            Update Vehical_details  Set ParkingEndtime = ?
-                            Where  VehicalNumber == ? ;
-                            ''', ( datetime.datetime.now(),str(departing_Vehical_Number[2])))  
-            
-            conn.commit()
+            if departing_Vehical_Number is None:
+                
+                result =  "This Vehical is not Parked in Parking Lot"
 
-            result = "Vehical " + VehicalNumber + " is departed from Spot "  + str(departing_Vehical_Number[2] + " and total fare is " + str(self.fare_calculator(VehicalNumber)) + " Rs ")
+            else:
+                cursor.execute('''
+                                Update ParkingSpot_details  Set VehicalNumber = NULL,
+                                Spot = "Empty"   
+                                Where  VehicalNumber == ?;
+                                ''', (str(departing_Vehical_Number[2]),))  
+                
+                cursor.execute('''
+                                Update Vehical_details  Set ParkingEndtime = ?
+                                Where  VehicalNumber == ? ;
+                                ''', ( datetime.datetime.now(),str(departing_Vehical_Number[2])))  
+                
+                conn.commit()
+
+                result = "Vehical " + VehicalNumber + " is departed from Spot "  + str(departing_Vehical_Number[0]) + " and total fare is " + str(self.fare_calculator(VehicalNumber)) + " Rs "
+        
             return result
-            
+                
 
 
     def fare_calculator(self, VehicalNumber):
@@ -159,7 +156,14 @@ class db_operations:
         Vehical = cursor.execute("Select VehicalNumber, ParkingSpotNumber  FROM ParkingSpot_details Where VehicalNumber == ? ;", (VehicalNumber,) )
 
         Vehical = Vehical.fetchone()
-        result = "Vehical " + str(Vehical[0]) + " is parked at spot " + str(Vehical[1])
+
+        if Vehical is None:
+
+            result =  "This Vehical is not Parked in Parking Lot"
+        
+        else:
+            
+            result = "Vehical " + str(Vehical[0]) + " is parked at spot " + str(Vehical[1])
 
         return result
 
@@ -168,16 +172,16 @@ class db_operations:
 
             
 
-# if __name__ == "__main__":
+#if __name__ == "__main__":
     # create = db_creation()
     # create.ParkingSpot_details()
     # create.vehical_details()
 
-    # data =  db_operations()
+    #data =  db_operations()
     # print(data.get_empty_parking_spot())
-    # print(data.get_Occupied_parking_spot())
+    #print(data.get_Occupied_parking_spot())
     # print(data.park_vehical("MH23645"))
-    # print(data.search_vehical("MH652365126"))
+    #print(data.search_vehical("876ghhhttyft"))
     # print(data.fare_calculator("MH23645"))
 
 
